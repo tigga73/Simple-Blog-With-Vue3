@@ -7,6 +7,8 @@ defineProps<{
 </script>
 
 <template>
-  <a>{{ post.title }}</a>
-  <div>{{ post.created.toFormat("d MMMM") }}</div>
+  <a class="is-flex-direction-column is-align-items-start">
+    <a>{{ post.title }}</a>
+    <div>{{ post.created.toFormat("d MMMM") }}</div>
+  </a>
 </template>
