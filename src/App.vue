@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router"
+import NavBar from "./components/Navbar.vue"
 </script>
 
 <template>
   <div class="section">
     <div class="container">
+      <NavBar />
       <RouterView />
     </div>
   </div>
