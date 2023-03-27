@@ -12,5 +12,6 @@ const post: TimelinePost = {
 </script>
 
 <template>
+  New Post
   <PostWriter :post="post" />
 </template>

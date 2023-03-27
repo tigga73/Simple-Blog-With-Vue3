@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
+import { ref, onMounted, watch } from "vue"
+import { marked } from "marked"
 import { TimelinePost } from "../post"
+import highlight from "highlight.js"
 
 const props = defineProps<{
   post: TimelinePost
@@ -10,6 +12,28 @@ const title = ref(props.post.title)
 const content = ref(props.post.markdown)
 const html = ref("")
 const contentEditable = ref<HTMLDivElement>()
+
+watch(
+  content,
+  (newContent) => {
+    marked.parse(
+      newContent,
+      {
+        gfm: true,
+        breaks: true,
+        highlight: (code) => {
+          return highlight.highlightAuto(code).value
+        },
+      },
+      (err, parseResult) => {
+        html.value = parseResult
+      },
+    )
+  },
+  {
+    immediate: true,
+  },
+)
 
 onMounted(() => {
   if (!contentEditable.value) {
@@ -30,7 +54,7 @@ function handleInput() {
   <div class="columns">
     <div class="column">
       <div class="field">
-        <div class="label">New Post</div>
+        <div class="label">Post Title</div>
         <input type="text" class="input" v-model="title" />
       </div>
     </div>
@@ -42,7 +66,6 @@ function handleInput() {
     </div>
     <div class="column">
       <div v-html="html" />
-      {{ content }}
     </div>
   </div>
 </template>
