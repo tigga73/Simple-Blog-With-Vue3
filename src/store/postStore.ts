@@ -40,6 +40,10 @@ export const usePosts = defineStore("posts", {
       this.ids = id
       this.all = all
     },
+
+    createPost(post: TimelinePost) {
+      console.log(post)
+    },
   },
 
   getters: {
