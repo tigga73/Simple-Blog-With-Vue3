@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue"
+import { usePosts } from "../store/postStore"
+import { useRouter } from "vue-router"
 import { marked } from "marked"
 import { TimelinePost } from "../post"
 import highlight from "highlight.js"
 import { debounce } from "lodash"
-import { usePosts } from "../store/postStore"
 
 const props = defineProps<{
   post: TimelinePost
@@ -16,6 +17,7 @@ const html = ref("")
 const contentEditable = ref<HTMLDivElement>()
 
 const postStore = usePosts()
+const router = useRouter()
 
 watch(
   content,
@@ -57,14 +59,15 @@ function parseHtml(markdown: string) {
   )
 }
 
-function handleClick() {
+async function handleClick() {
   const newPost: TimelinePost = {
     ...props.post,
     title: title.value,
     markdown: content.value,
     html: html.value,
   }
-  postStore.createPost(newPost)
+  await postStore.createPost(newPost)
+  router.push("/")
 }
 </script>
 
