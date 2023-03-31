@@ -3,6 +3,8 @@ import { computed, ref } from "vue"
 import FormInput from "./FormInput.vue"
 import { validate, length, required } from "../validation"
 import { NewUser } from "../users"
+import { useUsers } from "../store/userStore"
+import { useModal } from "../composables/modal"
 
 const username = ref("")
 const usernameStatus = computed(() => {
@@ -18,8 +20,11 @@ const isValid = computed(() => {
   return !usernameStatus.value.valid || !passwordStatus.value.valid
 })
 
+const userStore = useUsers()
+const modal = useModal()
+
 function handleSubmit() {
-  if (isValid) {
+  if (!isValid) {
     return
   }
 
@@ -27,14 +32,29 @@ function handleSubmit() {
     username: username.value,
     password: password.value,
   }
-  console.log(newUser)
+
+  try {
+    userStore.createUser(newUser)
+  } catch (e) {}
+
+  modal.hideModal()
 }
 </script>
 
 <template>
   <form class="form" @submit.prevent="handleSubmit">
-    <FormInput name="Username" v-model="username" :status="usernameStatus" />
-    <FormInput name="Password" v-model="password" :status="passwordStatus" />
+    <FormInput
+      name="Username"
+      v-model="username"
+      :status="usernameStatus"
+      type="text"
+    />
+    <FormInput
+      name="Password"
+      v-model="password"
+      :status="passwordStatus"
+      type="password"
+    />
     <button class="button" :disabled="isValid">Submit</button>
   </form>
 </template>
