@@ -3,12 +3,12 @@ import { ref, onMounted, watch } from "vue"
 import { usePosts } from "../store/postStore"
 import { useRouter } from "vue-router"
 import { marked } from "marked"
-import { TimelinePost } from "../post"
+import { Post, TimelinePost } from "../post"
 import highlight from "highlight.js"
 import { debounce } from "lodash"
 
 const props = defineProps<{
-  post: TimelinePost
+  post: TimelinePost | Post
 }>()
 
 const title = ref(props.post.title)

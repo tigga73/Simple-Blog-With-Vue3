@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { RouterLink } from "vue-router"
 import { TimelinePost } from "../post"
 
 defineProps<{
@@ -7,8 +8,11 @@ defineProps<{
 </script>
 
 <template>
-  <a class="is-flex-direction-column is-align-items-start">
+  <RouterLink
+    :to="`/posts/${post.id}`"
+    class="is-flex-direction-column is-align-items-start"
+  >
     <a>{{ post.title }}</a>
     <div>{{ post.created.toFormat("d MMMM") }}</div>
-  </a>
+  </RouterLink>
 </template>
