@@ -51,6 +51,16 @@ app.post<{}, {}, Post>("/posts", (req, res) => {
   res.json(allPosts)
 })
 
+app.put<{}, {}, Post>("/posts", (req, res) => {
+  const index = allPosts.findIndex((x) => x.id === req.body.id)
+  if (index === -1) {
+    throw Error(`Post with id ${req.body.id} was not found.`)
+  }
+
+  allPosts[index] = { ...allPosts[index], ...req.body }
+  res.json(allPosts[index])
+})
+
 app.post<{}, {}, NewUser>("/login", (req, res) => {
   const targetUser = allUsers.find((x) => x.username === req.body.username)
 

@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { DateTime } from "luxon"
 import { ref, onMounted, watch } from "vue"
-import { usePosts } from "../store/postStore"
-import { useRouter } from "vue-router"
 import { marked } from "marked"
 import { Post, TimelinePost } from "../post"
 import highlight from "highlight.js"
@@ -13,14 +10,16 @@ const props = defineProps<{
   post: TimelinePost | Post
 }>()
 
+const emit = defineEmits<{
+  (event: "submit", post: Post): void
+}>()
+
+const userStore = useUsers()
+
 const title = ref(props.post.title)
 const content = ref(props.post.markdown)
 const html = ref("")
 const contentEditable = ref<HTMLDivElement>()
-
-const postStore = usePosts()
-const userStore = useUsers()
-const router = useRouter()
 
 watch(
   content,
@@ -78,8 +77,7 @@ async function handleClick() {
     markdown: content.value,
     html: html.value,
   }
-  await postStore.createPost(newPost)
-  router.push("/")
+  emit("submit", newPost)
 }
 </script>
 
