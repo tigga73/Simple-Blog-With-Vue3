@@ -17,7 +17,6 @@ export const router = createRouter({
       component: NewPost,
       beforeEnter: () => {
         const userStore = useUsers()
-
         if (!userStore.currentUserId) {
           return { path: "/" }
         }
@@ -30,6 +29,12 @@ export const router = createRouter({
     {
       path: "/posts/:id/edit",
       component: EditPost,
+      beforeEnter: () => {
+        const userStore = useUsers()
+        if (!userStore.currentUserId) {
+          return { path: "/" }
+        }
+      },
     },
   ],
 })
